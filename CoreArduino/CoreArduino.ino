@@ -22,7 +22,7 @@
 /* Definição de Constantes e Pinos                                */
 /******************************************************************/
 
-#define dht_dpin A15 //Pino DATA do Sensor ligado na porta Analogica A1
+#define dht_dpin A1 //Pino DATA do Sensor ligado na porta Analogica A1
 
 int canal_01 = 12;
 int canal_02 = 11;
@@ -152,7 +152,7 @@ void obtemLuzes(String dados) {
    canal_07_valor = dados.substring(30,33).toInt();
    
    
-   /* Debugar */
+   /* Debugar 
    Serial.println(canal_01_valor);
    Serial.println(canal_02_valor);
    Serial.println(canal_03_valor);
@@ -160,6 +160,7 @@ void obtemLuzes(String dados) {
    Serial.println(canal_05_valor);
    Serial.println(canal_06_valor);
    Serial.println(canal_07_valor);
+   */
  
    
 }
@@ -195,11 +196,12 @@ boolean obtemDados() {
 
 void obtemDHT11() {
   
-  DHT.read11(dht_dpin); //Lê as informações do sensor
-
-    Serial.print(DHT.humidity);
-    Serial.print(";");
+    DHT.read11(dht_dpin); //Lê as informações do sensor
     Serial.print(DHT.temperature); 
+    Serial.print(";");
+    Serial.print(DHT.humidity);
+    Serial.print("\n");
+    
     /*delay(2000);  //Não diminuir muito este valor. O ideal é a leitura a cada 2 segundo */
 }
 
