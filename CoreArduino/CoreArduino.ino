@@ -3,7 +3,7 @@
 *    Comunicação Serial para Envio e Recebimento de infomações                *
 *    pela porta Serial                                                        *
 *                                                                             *
-*    Versão: 0.0.2                                                            *
+*    Versão: 0.1.0                                                            *
 *    Data: 21/08/2014                                                         *
 *    Autor: Alex Ishida                                                       *
 *    Site: http://alexishida.com                                              *
@@ -40,10 +40,18 @@ int canal_05_valor = 0;
 int canal_06_valor = 0;
 int canal_07_valor = 0;
 
+/* Seta o valor máximo do pwm*/
+int pwm_maximo = 200;
 
 /* Define o led de status */
 int led_stautus_pin = 13;
 bool led_status = false;
+
+/* Variaveis dos modo tempestade */
+bool tempestade = false;
+int temp_led_raio = 200;
+int temp_leds = 15;
+unsigned long temp_tempo_espera = 0L;
 
 /******************************************************************/
 /* Definição de Variáveis                                         */
@@ -59,12 +67,13 @@ void setup()
  /* 
    Aqui eu altero a frequência dos timer 1,2,3,4  
    Se alterar o timer 0 irá influenciar nas funções de controle de tempo do Arduino ex.: delay();
-*/   
+  */   
+  
   TCCR1B = (TCCR1B & 0xF8) | 0x01; // 31.374 KHz
   TCCR2B = (TCCR2B & 0xF8) | 0x01; // 31.374 KHz
   TCCR3B = (TCCR3B & 0xF8) | 0x01; // 31.374 KHz
   TCCR4B = (TCCR4B & 0xF8) | 0x01; // 31.374 KHz
-  
+
   
   pinMode(canal_01, OUTPUT);
   pinMode(canal_02, OUTPUT);
@@ -76,8 +85,6 @@ void setup()
   
   pinMode(led_stautus_pin, OUTPUT);
 
-  
-/*  delay(1000);//Aguarda 1 seg antes de acessar as informações do sensor */
  Serial.println("conectado;");
 }
 
@@ -94,7 +101,17 @@ void loop()
      else if(comando.startsWith("luzes")) {
        
       obtemLuzes(comando);
-       Serial.println("luzes;true");
+      Serial.println("luzes;true");
+      
+     }
+     else if(comando.startsWith("tempestade;ON")) {
+        tempestade = true;
+       Serial.println("tempestade;ON");
+      
+     }
+     else if(comando.startsWith("tempestade;OFF")) {
+        tempestade = false;
+       Serial.println("tempestade;OFF");
       
      }
     
@@ -107,13 +124,18 @@ void loop()
        
      }
     
-  atualizaLuzes();
-  
+    if(tempestade)
+    {
+      modoTempestade();
+    }
+    else {
+     atualizaLuzes();
+    }
 }
 
 
 void ledStatus() {
-  delay(500);
+ /* delay(500);
   if(led_status) {
     digitalWrite(led_stautus_pin, HIGH); 
     led_status = false;
@@ -121,23 +143,179 @@ void ledStatus() {
     digitalWrite(led_stautus_pin, LOW);
     led_status = true;
   }
+*/
+}
 
+
+/*
+
+1 - Violeta
+2 - Branco
+3 - Vermelho
+4 - Azul
+5 - Violeta
+6 - Aquitinium
+7 - Verde
+
+tempestade;ON
+tempestade;OFF
+*/
+
+
+
+void modoTempestade() {
+
+  
+  
+  
+  if(comparaTempo(temp_tempo_espera)) {
+    
+  temp_tempo_espera = random(7,15);
+  Serial.println(temp_tempo_espera);
+  temp_tempo_espera = (temp_tempo_espera * 1000);
+  temp_tempo_espera = temp_tempo_espera + millis();
+  
+  int modo = random(1,10);
+  
+  atualizaLuzesTempestade(temp_leds);
+  
+  if(modo <= 5) {
+   analogWrite(canal_01,temp_led_raio);
+   analogWrite(canal_02,temp_led_raio);
+   analogWrite(canal_06,temp_led_raio);
+   delay(40);
+   atualizaLuzesTempestade(temp_leds);
+   delay(40);
+   analogWrite(canal_01,temp_led_raio);
+   analogWrite(canal_02,temp_led_raio);
+   analogWrite(canal_06,temp_led_raio);
+   delay(40);
+  atualizaLuzesTempestade(temp_leds);
+   delay(40);
+     analogWrite(canal_01,temp_led_raio);
+   analogWrite(canal_02,temp_led_raio);
+   analogWrite(canal_06,temp_led_raio);
+   delay(40);
+  atualizaLuzesTempestade(temp_leds);
+   delay(100);
+   analogWrite(canal_01,temp_led_raio);
+   analogWrite(canal_02,temp_led_raio);
+   analogWrite(canal_06,temp_led_raio);
+   delay(100);
+atualizaLuzesTempestade(temp_leds);
+
+
+      Serial.println("modo1");
+      Serial.println("----------");
+
+  } else {
+    
+   analogWrite(canal_01,temp_led_raio);
+   analogWrite(canal_02,temp_led_raio);
+   analogWrite(canal_06,temp_led_raio);
+   delay(80);
+atualizaLuzesTempestade(temp_leds);
+   delay(80);
+   analogWrite(canal_01,temp_led_raio);
+   analogWrite(canal_02,temp_led_raio);
+   analogWrite(canal_06,temp_led_raio);
+   delay(80);
+atualizaLuzesTempestade(temp_leds);
+   
+
+       Serial.println("modo2");
+      Serial.println("----------");
+   
+  }
+  }
+  
+   
+}
+
+
+void atualizaLuzesTempestade(int valor) {
+  
+  if(canal_01_valor >= valor) {
+    analogWrite(canal_01, valor);
+  }
+  else {
+    analogWrite(canal_01, valorMaximo(canal_01_valor));
+  }
+  
+  if(canal_02_valor >= valor) {
+    analogWrite(canal_02, valor);
+  }
+  else {
+    analogWrite(canal_02, valorMaximo(canal_02_valor));
+  }
+  
+  if(canal_03_valor >= valor) {
+    analogWrite(canal_03, valor);
+  }
+  else {
+    analogWrite(canal_03, valorMaximo(canal_03_valor));
+  }
+  
+  
+   if(canal_04_valor >= valor) {
+    analogWrite(canal_04, valor);
+  }
+  else {
+    analogWrite(canal_04, valorMaximo(canal_04_valor));
+  }
+  
+  
+     if(canal_05_valor >= valor) {
+    analogWrite(canal_05, valor);
+  }
+  else {
+    analogWrite(canal_05, valorMaximo(canal_05_valor));
+  }
+  
+  
+    
+  if(canal_06_valor >= valor) {
+    analogWrite(canal_06, valor);
+  }
+  else {
+    analogWrite(canal_06, valorMaximo(canal_06_valor));
+  }
+  
+  
+ if(canal_07_valor >= valor) {
+    analogWrite(canal_07, valor);
+  }
+  else {
+    analogWrite(canal_07, valorMaximo(canal_07_valor));
+  }
+
+   
 }
 
 
 
 void atualizaLuzes() {
   
-   analogWrite(canal_01, canal_01_valor);
-   analogWrite(canal_02, canal_02_valor);
-   analogWrite(canal_03, canal_03_valor);
-   analogWrite(canal_04, canal_04_valor);
-   analogWrite(canal_05, canal_05_valor);
-   analogWrite(canal_06, canal_06_valor);
-   analogWrite(canal_07, canal_07_valor);
-
+   analogWrite(canal_01, valorMaximo(canal_01_valor));
+   analogWrite(canal_02, valorMaximo(canal_02_valor));
+   analogWrite(canal_03, valorMaximo(canal_03_valor));
+   analogWrite(canal_04, valorMaximo(canal_04_valor));
+   analogWrite(canal_05, valorMaximo(canal_05_valor));
+   analogWrite(canal_06, valorMaximo(canal_06_valor));
+   analogWrite(canal_07, valorMaximo(canal_07_valor));
    
 }
+
+int valorMaximo(int canal_valor) {
+
+  if(canal_valor > pwm_maximo ) {
+    return pwm_maximo;
+  }
+  else {
+    return canal_valor;
+  }
+}
+
 
 
 void obtemLuzes(String dados) {
@@ -197,14 +375,25 @@ boolean obtemDados() {
 void obtemDHT11() {
   
     DHT.read11(dht_dpin); //Lê as informações do sensor
+    
     Serial.print(DHT.temperature); 
     Serial.print(";");
     Serial.print(DHT.humidity);
     Serial.print("\n");
-    
-    /*delay(2000);  //Não diminuir muito este valor. O ideal é a leitura a cada 2 segundo */
 }
 
+
+bool comparaTempo(unsigned long antigo) {
+  unsigned long atual = millis(); 
+  
+  if(atual>=antigo) {
+    return true; 
+  }
+  else {
+    return false;
+  }
+  
+}
 
 
 
