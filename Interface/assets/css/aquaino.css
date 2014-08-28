@@ -1,17 +1,61 @@
 /*
 
 */
-
 .logo-menu {
     margin-top: 150px;
     margin-left: 75px;
     display: block;
 }
 
-.rasp-mini-logo {
-    float: left;
-    padding-left: 10px;
-    padding-top: 7px;
+/* 
+    Classes auxiliares
+    ---------
+*/
+
+.mostrar {
+    display: block !important;
+}
+.esconder {
+    display: none !important;
+}
+
+.mt_0 {
+    margin-top: 0;
+}
+.mt_5 {
+    margin-top: 5px;
+}
+.mt_10 {
+    margin-top: 10px;
+}
+.mt_15 {
+    margin-top: 10px;
+}
+.mt_20 {
+    margin-top: 20px;
+}
+
+
+.mb_0 {
+    margin-bottom: 0;
+}
+.mb_5 {
+    margin-bottom: 5px;
+}
+.mb_10 {
+    margin-bottom: 10px;
+}
+.mb_15 {
+    margin-bottom: 10px;
+}
+.mb_20 {
+    margin-bottom: 20px;
+}
+
+
+
+.mr_3 {
+    margin-right: 3px;
 }
 
 
@@ -79,9 +123,6 @@
   color: #555555;
 }
 /* skin-aquaino sidebar */
-.skin-aquaino .sidebar {
-  border-bottom: 1px solid #fff;
-}
 .skin-aquaino .sidebar > .sidebar-menu > li {
   border-top: 1px solid #fff;
   border-bottom: 1px solid #dbdbdb;
@@ -175,13 +216,4 @@
   border-top-right-radius: 2px !important;
   border-bottom-right-radius: 2px !important;
   border-bottom-left-radius: 0 !important;
-}
-
-/* 
-    Classes auxiliares
-    ---------
-*/
-
-.mr_3 {
-    margin-right: 3px;
 }

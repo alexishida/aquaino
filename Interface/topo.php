@@ -1,7 +1,7 @@
         
         <!-- header logo: style can be found in header.less -->
         <header class="header">
-              <a href="index.html" class="logo"><img src="../assets/img/aquaino-logo.png" /></a>
+              <a href="../index.php" class="logo"><img src="../assets/img/aquaino-logo.png" /></a>
             <!-- Header Navbar: style can be found in header.less -->
             <nav class="navbar navbar-static-top" role="navigation">
                 <!-- Sidebar toggle button-->
@@ -12,7 +12,7 @@
                     <span class="icon-bar"></span>
                 </a>
                 <div class="navbar-right">
-                    <ul class="nav navbar-nav">
+                    <ul class="nav navbar-nav esconder">
                         <!-- Messages: style can be found in dropdown.less-->
                         <li class="dropdown messages-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
