@@ -77,10 +77,6 @@ unsigned long temp_tempo_espera = 0L;
 String comando;
 
 
-
-
-
-
 void setup()
 {
     Serial.begin(9600);
@@ -402,6 +398,9 @@ void obtemDHT11() {
 
 void obtemDadosDS18B20()
 {
+  
+  //2805E48C050000CE;26.25|2843F88D050000DB;25.50
+
   obtemEnderecoDS18B20(DS18B20_01);
   Serial.print(";");
   obtemTemperaturaDS18B20(DS18B20_01);
