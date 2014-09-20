@@ -3,10 +3,10 @@
 *    Comunicação Serial para Envio e Recebimento de infomações                *
 *    pela porta Serial                                                        *
 *                                                                             *
-*    Versão: 0.1.0                                                            *
-*    Data: 21/08/2014                                                         *
+*    Versão: 0.2.0                                                            *
+*    Data: 19/09/2014                                                         *
 *    Autor: Alex Ishida                                                       *
-*    Site: http://alexishida.com                                              *
+*    Site: http://alexishida.com  | http://aquaino.com                        *
 *    E-mail: alexishida@gmail.com                                             *
 *                                                                             *
 ******************************************************************************/
@@ -14,16 +14,32 @@
 /******************************************************************/
 /* Definição de Bibliotecas                                       */
 /******************************************************************/
-#include <dht.h>
 
+#include <OneWire.h>
+#include <DallasTemperature.h>
+#include <dht.h>
 
 
 /******************************************************************/
 /* Definição de Constantes e Pinos                                */
 /******************************************************************/
 
+dht DHT; //Inicializa o sensor
 #define dht_dpin A1 //Pino DATA do Sensor ligado na porta Analogica A1
 
+
+/* Define as portas do DS18B20 */
+#define DS18B20_PORTA 5
+
+OneWire oneWire(DS18B20_PORTA);
+DallasTemperature sensors(&oneWire);
+
+/* Endereço dos sensores DS18B20 - Para saber mais acesse http://www.hacktronics.com/Tutorials/arduino-1-wire-address-finder.html */
+DeviceAddress DS18B20_01 = { 0x28, 0x05, 0xE4, 0x8C, 0x05, 0x00, 0x00, 0xCE };
+DeviceAddress DS18B20_02 = { 0x28, 0x43, 0xF8, 0x8D, 0x05, 0x00, 0x00, 0xDB };
+
+
+/* Definição dos canais de luzes */ 
 int canal_01 = 12;
 int canal_02 = 11;
 int canal_03 = 10;
@@ -57,46 +73,71 @@ unsigned long temp_tempo_espera = 0L;
 /* Definição de Variáveis                                         */
 /******************************************************************/
 
-dht DHT; //Inicializa o sensor
+
 String comando;
+
+
+
+
+
 
 void setup()
 {
-  Serial.begin(9600);
+    Serial.begin(9600);
+    
+   /* 
+     Aqui eu altero a frequência dos timer 1,2,3,4  
+     Se alterar o timer 0 irá influenciar nas funções de controle de tempo do Arduino ex.: delay();
+    */   
+ 
+    TCCR1B = (TCCR1B & 0xF8) | 0x01; // 31.374 KHz
+    TCCR2B = (TCCR2B & 0xF8) | 0x01; // 31.374 KHz
+    TCCR3B = (TCCR3B & 0xF8) | 0x01; // 31.374 KHz
+    TCCR4B = (TCCR4B & 0xF8) | 0x01; // 31.374 KHz
   
- /* 
-   Aqui eu altero a frequência dos timer 1,2,3,4  
-   Se alterar o timer 0 irá influenciar nas funções de controle de tempo do Arduino ex.: delay();
-  */   
+    /* Inicializa DS18B20 */
+    sensors.begin();
+    
+   // Setando as resoluções 10 bits dos sensores
+   sensors.setResolution(DS18B20_01, 10);
+   sensors.setResolution(DS18B20_02, 10);
+   
+   
+    /* Seta as portas dos canais das luzes */
+    pinMode(canal_01, OUTPUT);
+    pinMode(canal_02, OUTPUT);
+    pinMode(canal_03, OUTPUT);
+    pinMode(canal_04, OUTPUT);
+    pinMode(canal_05, OUTPUT);
+    pinMode(canal_06, OUTPUT);
+    pinMode(canal_07, OUTPUT);
+    
+    pinMode(led_stautus_pin, OUTPUT);
   
-  TCCR1B = (TCCR1B & 0xF8) | 0x01; // 31.374 KHz
-  TCCR2B = (TCCR2B & 0xF8) | 0x01; // 31.374 KHz
-  TCCR3B = (TCCR3B & 0xF8) | 0x01; // 31.374 KHz
-  TCCR4B = (TCCR4B & 0xF8) | 0x01; // 31.374 KHz
-
-  
-  pinMode(canal_01, OUTPUT);
-  pinMode(canal_02, OUTPUT);
-  pinMode(canal_03, OUTPUT);
-  pinMode(canal_04, OUTPUT);
-  pinMode(canal_05, OUTPUT);
-  pinMode(canal_06, OUTPUT);
-  pinMode(canal_07, OUTPUT);
-  
-  pinMode(led_stautus_pin, OUTPUT);
-
- Serial.println("conectado;");
+   Serial.println("conectado;");
+ 
 }
+
+
+
+/******************************************************************/
+/* Loop Principal do Arduino                                      */
+/******************************************************************/
 
 void loop()
 {
 
 
+  /*Obtem os comandos da porta serial*/
   if(obtemDados())
   {
      
      if(comando == "dht11") {
        obtemDHT11();
+     }
+      else if(comando.startsWith("DS18B20")) {
+        sensors.requestTemperatures();
+        obtemDadosDS18B20();
      }
      else if(comando.startsWith("luzes")) {
        
@@ -114,6 +155,7 @@ void loop()
        Serial.println("tempestade;OFF");
       
      }
+    
     
 
   }
@@ -134,17 +176,9 @@ void loop()
 }
 
 
-void ledStatus() {
- /* delay(500);
-  if(led_status) {
-    digitalWrite(led_stautus_pin, HIGH); 
-    led_status = false;
-  } else {
-    digitalWrite(led_stautus_pin, LOW);
-    led_status = true;
-  }
-*/
-}
+
+
+
 
 
 /*
@@ -163,10 +197,11 @@ tempestade;OFF
 
 
 
-void modoTempestade() {
+/******************************************************************/
+/* Funções dos canais de luzes                                    */
+/******************************************************************/
 
-  
-  
+void modoTempestade() {
   
   if(comparaTempo(temp_tempo_espera)) {
     
@@ -232,6 +267,7 @@ atualizaLuzesTempestade(temp_leds);
    
 }
 
+/******************************************************************/
 
 void atualizaLuzesTempestade(int valor) {
   
@@ -292,7 +328,7 @@ void atualizaLuzesTempestade(int valor) {
    
 }
 
-
+/******************************************************************/
 
 void atualizaLuzes() {
   
@@ -306,6 +342,9 @@ void atualizaLuzes() {
    
 }
 
+
+/******************************************************************/
+
 int valorMaximo(int canal_valor) {
 
   if(canal_valor > pwm_maximo ) {
@@ -316,7 +355,7 @@ int valorMaximo(int canal_valor) {
   }
 }
 
-
+/******************************************************************/
 
 void obtemLuzes(String dados) {
   
@@ -344,6 +383,63 @@ void obtemLuzes(String dados) {
 }
 
 
+/******************************************************************/
+/* Funções dos Sensores                                           */
+/******************************************************************/
+
+
+void obtemDHT11() {
+  
+    DHT.read11(dht_dpin); //Lê as informações do sensor
+    
+    Serial.print(DHT.temperature); 
+    Serial.print(";");
+    Serial.print(DHT.humidity);
+    Serial.print("\n");
+}
+
+/******************************************************************/
+
+void obtemDadosDS18B20()
+{
+  obtemEnderecoDS18B20(DS18B20_01);
+  Serial.print(";");
+  obtemTemperaturaDS18B20(DS18B20_01);
+  
+  Serial.print("|");
+  
+  obtemEnderecoDS18B20(DS18B20_02);
+  Serial.print(";");
+  obtemTemperaturaDS18B20(DS18B20_02);
+  
+  Serial.println();
+}
+
+/******************************************************************/
+
+void obtemEnderecoDS18B20(DeviceAddress deviceAddress)
+{
+  for (uint8_t i = 0; i < 8; i++)
+  {
+    // zero pad the address if necessary
+    if (deviceAddress[i] < 16) Serial.print("0");
+    Serial.print(deviceAddress[i], HEX);
+  }
+}
+
+/******************************************************************/
+
+void obtemTemperaturaDS18B20(DeviceAddress deviceAddress)
+{
+  float tempC = sensors.getTempC(deviceAddress);
+  Serial.print(tempC);
+}
+
+
+/******************************************************************/
+/* Funções Auxiliares                                             */
+/******************************************************************/
+
 
 boolean obtemDados() {
   
@@ -369,19 +465,21 @@ boolean obtemDados() {
 
 }
 
+/******************************************************************/
 
-
-
-void obtemDHT11() {
-  
-    DHT.read11(dht_dpin); //Lê as informações do sensor
-    
-    Serial.print(DHT.temperature); 
-    Serial.print(";");
-    Serial.print(DHT.humidity);
-    Serial.print("\n");
+void ledStatus() {
+ /* delay(500);
+  if(led_status) {
+    digitalWrite(led_stautus_pin, HIGH); 
+    led_status = false;
+  } else {
+    digitalWrite(led_stautus_pin, LOW);
+    led_status = true;
+  }
+*/
 }
 
+/******************************************************************/
 
 bool comparaTempo(unsigned long antigo) {
   unsigned long atual = millis(); 
@@ -395,5 +493,5 @@ bool comparaTempo(unsigned long antigo) {
   
 }
 
-
+/******************************************************************/
 
