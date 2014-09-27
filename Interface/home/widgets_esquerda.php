@@ -61,9 +61,14 @@
                     <div class="knob-label">Verde</div>
                 </div>
                 
+                 <div class="col-xs-6 col-md-3 text-center">
+                    <input type="text" class="knob" data-readonly="true" value="30" data-width="80" data-height="80" data-fgColor="#f39c12"/>
+                    <div class="knob-label">Potência Máxima</div>
+                </div>
+                
              </div>  
              
-               <div class="row margin">
+               <div class="row margin esconder">
                 <div class="col-xs-12 text-center">
                     <div class="row">
                         <div class="col-xs-4">

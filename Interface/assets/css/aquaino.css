@@ -46,7 +46,7 @@
     margin-bottom: 10px;
 }
 .mb_15 {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 .mb_20 {
     margin-bottom: 20px;
@@ -57,6 +57,14 @@
 .mr_3 {
     margin-right: 3px;
 }
+
+
+/* Tabelas */
+
+.tb_titulo_center thead tr th {
+    text-align: center;
+}
+
 
 
 
@@ -216,4 +224,65 @@
   border-top-right-radius: 2px !important;
   border-bottom-right-radius: 2px !important;
   border-bottom-left-radius: 0 !important;
+}
+
+
+#slider_actinio .slider-selection {
+    background: #9fa8da;
+}
+#slider_ultravioleta .slider-selection {
+    background: #ab47bc;
+}
+#slider_violeta .slider-selection {
+    background: #ea80fc;
+}
+
+#slider_branco .slider-selection {
+    background: #e0e0e0;
+}
+
+#slider_azul .slider-selection {
+    background: #5677fc;
+}
+
+#slider_vermelho .slider-selection {
+     background: #e51c23;
+}
+
+#slider_verde .slider-selection {
+     background: #64dd17;
+}
+
+
+.actinio {
+    background: #9fa8da !important;
+    color: #FFF;
+}
+.ultravioleta {
+    background: #ab47bc !important;
+    color: #FFF;
+}
+.violeta {
+    background: #ea80fc !important;
+    color: #FFF;
+}
+
+.branco {
+    background: #e0e0e0 !important;
+    color: #000;
+}
+
+.azul {
+    background: #5677fc !important;
+    color: #FFF;
+}
+
+.vermelho {
+     background: #e51c23 !important;
+     color: #FFF;
+}
+
+.verde {
+     background: #64dd17 !important;
+     color: #FFF;
 }

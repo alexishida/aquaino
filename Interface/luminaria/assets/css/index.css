@@ -1,30 +1,3 @@
 .btn_switch button{
     opacity: 1 !important;
 }
-
-
-#actinio .slider-selection {
-    background: #9fa8da;
-}
-#ultravioleta .slider-selection {
-    background: #ab47bc;
-}
-#violeta .slider-selection {
-    background: #ea80fc;
-}
-
-#branco .slider-selection {
-    background: #e0e0e0;
-}
-
-#azul .slider-selection {
-    background: #5677fc;
-}
-
-#vermelho .slider-selection {
-     background: #e51c23;
-}
-
-#verde .slider-selection {
-     background: #64dd17;
-}
