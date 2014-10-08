@@ -152,25 +152,13 @@ void loop()
       
      }
     
-    
 
-  }
-   else {
-       
-       /* Led de aguardo*/
-       ledStatus();
-       
-     }
-    
-    if(tempestade)
-    {
-      modoTempestade();
-    }
-    else {
-     atualizaLuzes();
-    }
+  
 }
 
+      verificaIluminacao();
+
+}
 
 
 
@@ -196,6 +184,18 @@ tempestade;OFF
 /******************************************************************/
 /* Funções dos canais de luzes                                    */
 /******************************************************************/
+void verificaIluminacao() {
+    if(tempestade)
+    {
+      modoTempestade();
+    }
+    else {
+     atualizaLuzes();
+    }
+}
+
+
+
 
 void modoTempestade() {
   
