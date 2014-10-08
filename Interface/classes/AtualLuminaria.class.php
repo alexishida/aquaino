@@ -17,7 +17,8 @@ Class AtualLuminaria extends AtualLuminariaModelo {
         $this->canal_06 = $_REQUEST['canal_06'];
         $this->canal_07 = $_REQUEST['canal_07'];
         $this->potencia_maxima = $_REQUEST['potencia_maxima'];
-        Erro::cadastra(parent::atualizar());
+        parent::atualizar();
+     /*   Erro::cadastra(parent::atualizar()); */
     }
 
     function obterDados() {

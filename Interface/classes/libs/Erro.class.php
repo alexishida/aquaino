@@ -34,17 +34,20 @@ Class Erro {
         if ($_SESSION['erro_inicializado'] == true) {
 
             if ($_SESSION['erro_mensagem'] != '') {
-                echo '<div class="notification failure canhide">
-
-                <p><strong>FALHA: </strong>
-                ' . $_SESSION['erro_mensagem'] . '</p>
-         </div>';
+                
+                
+                echo '<div class="alert alert-danger alert-dismissable">
+                                <i class="fa fa-ban"></i>
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>';
+                          echo  $_SESSION['erro_mensagem'];
+                            echo   '</div>';
+  
 
                 $_SESSION['erro_mensagem'] = '';
             } else {
-                echo '<div class="notification success canhide">
-
-                   <p><strong>SUCESSO: </strong>';
+                echo '<div class="alert alert-success alert-dismissable">
+                                        <i class="fa fa-check"></i>
+                                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>';
 
                 if(isset($_REQUEST['id'])) {
 
@@ -55,11 +58,7 @@ Class Erro {
                     echo 'Dados cadastrados com sucesso!';
                 }
 
-                echo   '</p>
-          
-
-
-                    </div>  ';
+                echo '</div>';
             }
 
             $_SESSION['erro_inicializado'] = '';

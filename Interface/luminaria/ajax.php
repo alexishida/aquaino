@@ -1,7 +1,7 @@
-<?php
-
+<?php 
 require_once('../classes/config.php');
 require_once('../classes/autoload.php');
+require_once('../classes/Seguranca.session.php');
 
 $json_retorno = array();
 

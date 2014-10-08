@@ -1,6 +1,7 @@
-<?php
+<?php 
 require_once('../classes/config.php');
 require_once('../classes/autoload.php');
+require_once('../classes/Seguranca.session.php');
 
 require_once '../header.php';
 

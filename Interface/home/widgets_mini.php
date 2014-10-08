@@ -1,4 +1,4 @@
-                    <div class="row">
+                    <div class="row esconder">
                         
                            <div class="col-lg-4 col-xs-12">
                             <!-- small box -->

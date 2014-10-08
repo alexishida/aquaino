@@ -1,0 +1,58 @@
+/* fullscreen setup */
+html, body {
+    /* give this to all tags from html to .fullscreen */
+    height:100%;
+}
+.fullscreen,
+.content-a {
+    width:100%;
+    min-height:100%;
+}
+.not-fullscreen,
+.not-fullscreen .content-a,
+.fullscreen.not-overflow,
+.fullscreen.not-overflow .content-a {
+    height:100%;
+    overflow:hidden;
+}
+
+/* content centering styles */
+.content-a {
+    display:table;
+}
+.content-b {
+    display:table-cell;
+    position:relative;
+    vertical-align:middle;
+    text-align:center;
+}
+
+/* background setup */
+.background {
+    background-repeat:no-repeat;
+    /* custom background-position */
+    background-position:50% 50%;
+    /* ie8- graceful degradation */
+    background-position:50% 50%9 !important;
+}
+.form-box {
+    margin-top: 0px;
+}
+.form-box .header {
+    background: none repeat scroll 0 0 #FFF;
+}
+
+.bg-login {
+    background-color: #00979c !important;
+    color: #FFF;
+}
+
+.form-box .footer {
+   box-shadow: 0 -3px 0 rgba(0, 0, 0, 0.2) inset;
+}
+.alert {
+    margin-top: 15px;
+}
+
+
+

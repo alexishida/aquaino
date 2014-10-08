@@ -103,6 +103,7 @@
 
 /* skin-aquaino logo */
 .skin-aquaino .logo {
+  padding-top: 5px;
   background-color: #f4f4f4;
   line-height: 40px !important;
 }

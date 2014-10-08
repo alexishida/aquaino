@@ -28,7 +28,5 @@ define('DB_USUARIO','root');
 define('DB_SENHA','');
 define('DB_BANCO', 'aquaino');
 define('DB_CHARSET','utf8');
-define('CONEXAR_SISTEMA','Bejamin');
-define('CONEXAR_VERSAO','v0.0.5');
 define('TOKEN_SISTEMA','72be1b310f31b2e88f4c141faaa9eee0');
 ?>

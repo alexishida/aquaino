@@ -2,19 +2,11 @@
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
         
-        
-        
-        <!-- Sidebar user panel -->
-        <div class="user-panel">
-            <div class="pull-left image">
-                <img src="../assets/img/eu.png" class="img-circle" alt="User Image" />
-            </div>
-            <div class="pull-left info">
-                <p>Alex Ishida</p>
+ 
+            <div class="text-center" style="border-top: 1px solid #dbdbdb; padding-top: 14px; padding-bottom: 14px;">
+                <p style="font-size: 16px; margin: 0;"><i class="fa fa-user mr_3"></i> <?=  $_SESSION['nome_usuario'] ?></p>
+             </div>
 
-                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-            </div>
-        </div>
 
         
         <!-- Menu -->
@@ -26,7 +18,7 @@
                 </a>
             </li>
             
-            <li>
+            <li class="esconder">
                 <a href="index.html">
                     <i class="fa fa-exclamation-triangle"></i> <span>Alertas</span>
                 </a>
@@ -38,7 +30,7 @@
                 </a>
             </li>
             
-            <li class="treeview">
+            <li class="treeview esconder">
                 <a href="#">
                     <i class="fa fa-dashboard"></i>
                     <span>Sensores</span>
@@ -54,13 +46,19 @@
             
             
             
-            <li>
+            <li class="esconder">
                 <a href="index.html">
                     <i class="fa fa-cog"></i> <span>Configurações</span>
                 </a>
             </li>
            
         </ul>
+
+     
+            <div class="text-center">
+                <a class="btn btn-danger" style="font-size: 12px; padding-right: 12px; color: #fff; margin-top: 20px;" href="../home/login.php?sair"><i class="fa fa-sign-out"></i> Sair</a>
+            </div>
+     
 
 
         <a class="logo-menu">
